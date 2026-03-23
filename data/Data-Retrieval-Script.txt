@@ -1,0 +1,197 @@
+-- =========================================================
+-- SQL THUC HANH THEO SO SLIDE - DATA RETRIEVAL
+-- Tach tu file Data-Retrieval.pptx
+--
+-- Cach dung:
+-- 1) Dataset superstore:
+--    - Import file superstore.csv thanh bang `superstore`
+-- 2) Dataset join:
+--    - Import customer.csv thanh bang `customers`
+--    - Import invoices.csv thanh bang `invoices`
+--    - Tao relation: invoices.customer_id > customers.customer_id
+-- =========================
+-- DATASET: superstore
+-- =========================
+
+-- Slide 11
+SELECT *
+FROM superstore;
+
+
+-- Slide 15A
+SELECT category
+FROM superstore;
+
+-- Slide 15B
+SELECT row_id, order_id, order_date, ship_date
+FROM superstore;
+
+
+-- Slide 16
+SELECT
+    sales * (1 - discount) AS net_sales,
+    profit / sales AS profit_ratio
+FROM superstore;
+
+
+-- Slide 17A
+SELECT order_id, sales
+FROM superstore
+WHERE sales >= 2000;
+
+-- Slide 17B
+SELECT order_id, category
+FROM superstore
+WHERE category = 'Technology';
+
+
+-- Slide 18
+SELECT order_id, category, sales
+FROM superstore
+WHERE (category = 'Furniture' OR category = 'Technology')
+  AND sales > 200;
+
+
+-- Slide 19
+SELECT order_id, category, sub_category
+FROM superstore
+WHERE sub_category IN ('Phones', 'Chairs')
+LIMIT 4;
+
+
+-- Slide 20
+SELECT order_id, order_date, sales
+FROM superstore
+WHERE order_date BETWEEN '2017-11-01' AND '2017-11-30'
+ORDER BY order_date ASC
+LIMIT 3;
+
+
+-- Slide 21
+SELECT order_id, customer_name, city
+FROM superstore
+WHERE customer_name LIKE 'C%';
+
+
+-- Slide 22
+SELECT order_id, customer_name, product_name
+FROM superstore
+WHERE customer_name REGEXP '^[ABC]'
+  AND product_name REGEXP 'Mac|ThinkPad';
+
+
+-- Slide 23
+SELECT order_id, city, postal_code
+FROM superstore
+WHERE postal_code IS NULL;
+
+
+-- Slide 24
+SELECT order_id,
+       city,
+       COALESCE(postal_code, 'N/A') AS clean_zi
+FROM superstore
+WHERE city = 'Burlington';
+
+
+-- Slide 25
+SELECT order_id, profit, order_date
+FROM superstore
+ORDER BY profit DESC, order_date DESC;
+
+
+-- Slide 26A
+SELECT DISTINCT ship_mode
+FROM superstore
+ORDER BY ship_mode;
+
+-- Slide 26B
+SELECT DISTINCT region, category
+FROM superstore
+LIMIT 3;
+
+
+-- Slide 27A
+SELECT *
+FROM superstore
+LIMIT 5;
+
+-- Slide 27B
+SELECT order_id, category, sales
+FROM superstore
+ORDER BY sales DESC
+LIMIT 2 OFFSET 3;
+
+
+-- =========================
+-- PRACTICE: superstore
+-- =========================
+
+-- Slide 29
+SELECT order_id, customer_name, ship_date
+FROM superstore
+WHERE ship_date IS NULL
+LIMIT 10;
+
+
+-- Slide 30
+SELECT sales, quantity, discount
+FROM superstore
+WHERE sales BETWEEN 100 AND 200
+LIMIT 10;
+
+
+-- Slide 31
+SELECT category, sub_category, product_name
+FROM superstore
+WHERE category IN ('Furniture', 'Technology')
+LIMIT 10;
+
+
+-- Slide 32
+SELECT city, state, postal_code
+FROM superstore
+WHERE city LIKE 'San%'
+LIMIT 10;
+
+
+-- Slide 33
+SELECT city, state, region
+FROM superstore
+WHERE (region = 'West' OR region = 'East')
+  AND state = 'California'
+LIMIT 10;
+
+
+-- Slide 34
+SELECT sales, profit, quantity, discount
+FROM superstore
+ORDER BY sales DESC, profit DESC, quantity DESC
+LIMIT 10;
+
+
+-- =========================
+-- DATASET: customers + invoices
+-- =========================
+
+-- Slide 39
+SELECT invoice_id, first_name
+FROM invoices i
+JOIN customers c
+  ON i.customer_id = c.customer_id
+LIMIT 10;
+
+
+-- =========================
+-- PRACTICE JOIN
+-- =========================
+
+-- Slide 40
+SELECT i.invoice_id,
+       i.invoice_date,
+       c.first_name,
+       c.last_name
+FROM invoices i
+JOIN customers c
+  ON i.customer_id = c.customer_id
+LIMIT 10;
